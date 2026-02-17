@@ -71,7 +71,7 @@ Before you begin, ensure you have the following installed on your system:
 - **npm** (v11.9.0 or higher) - Comes with Node.js
 - **Angular CLI** (v21.1.3 or higher) - Install globally:
   ```bash
-  npm install -g @angular/cli@21.1.3
+  npm install -g @angular/cli
   ```
 
 ---
