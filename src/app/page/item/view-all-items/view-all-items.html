@@ -1,0 +1,37 @@
+<div class="overflow-x-auto">
+    <table class="w-full text-left border-collapse">
+        <thead>
+            <tr class="bg-gray-50 text-gray-500 text-xs uppercase tracking-widest font-black">
+                <th class="px-6 py-4">Code</th>
+                <th class="px-6 py-4">Description</th>
+                <th class="px-6 py-4">Pack Size</th>
+                <th class="px-6 py-4">Price</th>
+                <th class="px-6 py-4">Status</th>
+                <th class="px-6 py-4">Qty</th>
+            </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-100">
+            <tr *ngFor="let item of displayedItems" class="hover:bg-blue-50/20 transition-colors">
+                <td class="px-6 py-4 text-sm font-semibold text-blue-600">{{ item.code }}</td>
+                <td class="px-6 py-4 text-sm text-gray-700 font-medium">{{ item.desc }}</td>
+                <td class="px-6 py-4 text-sm text-gray-500">{{ item.pack }}</td>
+                <td class="px-6 py-4 text-sm font-bold text-gray-900">LKR {{ item.price | number:'1.2-2' }}</td>
+                <td class="px-6 py-4">
+                    <span *ngIf="item.qty > 10"
+                        class="px-2 py-1 text-[10px] font-bold uppercase rounded bg-green-100 text-green-700">In
+                        Stock</span>
+                    <span *ngIf="item.qty <= 10 && item.qty > 0"
+                        class="px-2 py-1 text-[10px] font-bold uppercase rounded bg-orange-100 text-orange-700">Low
+                        Stock</span>
+                    <span *ngIf="item.qty === 0"
+                        class="px-2 py-1 text-[10px] font-bold uppercase rounded bg-red-100 text-red-700">Out of
+                        Stock</span>
+                </td>
+                <td class="px-6 py-4 text-sm font-mono"
+                    [ngClass]="item.qty <= 10 ? 'text-red-600 font-bold' : 'text-gray-600'">
+                    {{ item.qty }}
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

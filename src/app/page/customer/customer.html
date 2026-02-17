@@ -1,0 +1,51 @@
+<div class="space-y-6">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div *ngFor="let stat of stats"
+            class="bg-white p-6 rounded-xl border border-gray-100 shadow-sm flex items-center space-x-4">
+            <div [ngClass]="'p-3 rounded-lg bg-' + stat.color + '-50 text-' + stat.color + '-600'">
+                <svg *ngIf="stat.icon === 'users'" class="w-6 h-6" fill="none" stroke="currentColor"
+                    viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z">
+                    </path>
+                </svg>
+                <svg *ngIf="stat.icon === 'plus'" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                <svg *ngIf="stat.icon === 'zap'" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                </svg>
+            </div>
+            <div>
+                <p class="text-sm font-medium text-gray-500">{{ stat.label }}</p>
+                <p class="text-2xl font-bold text-gray-900">{{ stat.value }}</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="flex justify-center">
+        <div class="inline-flex p-1 bg-gray-200 rounded-xl">
+            <button (click)="activeTab = 'manage'"
+                [ngClass]="activeTab === 'manage' ? 'bg-white text-blue-600 shadow-sm' : 'text-gray-600'"
+                class="px-6 py-2 text-sm font-medium rounded-lg transition-all">Manage Customer</button>
+            <button (click)="activeTab = 'all'"
+                [ngClass]="activeTab === 'all' ? 'bg-white text-blue-600 shadow-sm' : 'text-gray-600'"
+                class="px-6 py-2 text-sm font-medium rounded-lg transition-all">View All Directory</button>
+        </div>
+    </div>
+
+    <div *ngIf="activeTab === 'manage'" class="space-y-6">
+        <app-add-customer></app-add-customer>
+
+        <div class="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
+            <div class="px-6 py-4 border-b border-gray-100 font-bold text-gray-800">Latest Added Customers</div>
+            <app-view-all-customers [showActions]="false" [limit]="5"></app-view-all-customers>
+        </div>
+    </div>
+
+    <div *ngIf="activeTab === 'all'" class="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
+        <app-view-all-customers [showActions]="false"></app-view-all-customers>
+    </div>
+</div>

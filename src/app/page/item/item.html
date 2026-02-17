@@ -1,0 +1,60 @@
+<div class="space-y-6">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div *ngFor="let stat of stats"
+            class="bg-white p-6 rounded-xl border border-gray-100 shadow-sm flex items-center space-x-4">
+            <div [ngClass]="'p-3 rounded-lg bg-' + stat.color + '-50 text-' + stat.color + '-600'">
+                <svg *ngIf="stat.icon === 'box'" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
+                </svg>
+                <svg *ngIf="stat.icon === 'alert'" class="w-6 h-6" fill="none" stroke="currentColor"
+                    viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z">
+                    </path>
+                </svg>
+                <svg *ngIf="stat.icon === 'x'" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                <svg *ngIf="stat.icon === 'dollar'" class="w-6 h-6" fill="none" stroke="currentColor"
+                    viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z">
+                    </path>
+                </svg>
+            </div>
+            <div>
+                <p class="text-sm font-medium text-gray-500">{{ stat.label }}</p>
+                <p class="text-2xl font-bold text-gray-900">{{ stat.value }}</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="flex justify-center">
+        <div class="inline-flex p-1 bg-gray-200 rounded-xl">
+            <button (click)="activeTab = 'manage'"
+                [ngClass]="activeTab === 'manage' ? 'bg-white text-blue-600 shadow-sm' : 'text-gray-600'"
+                class="px-6 py-2 text-sm font-medium rounded-lg transition-all">Manage Inventory</button>
+            <button (click)="activeTab = 'all'"
+                [ngClass]="activeTab === 'all' ? 'bg-white text-blue-600 shadow-sm' : 'text-gray-600'"
+                class="px-6 py-2 text-sm font-medium rounded-lg transition-all">View All Items</button>
+        </div>
+    </div>
+
+    <div *ngIf="activeTab === 'manage'" class="space-y-6">
+        <app-add-item></app-add-item>
+
+        <div class="bg-white rounded-xl border border-gray-100 shadow-sm">
+            <div class="px-6 py-4 border-b border-gray-100 flex justify-between items-center">
+                <h3 class="font-bold text-gray-800">Latest Added Items</h3>
+                <span class="text-xs font-medium px-2 py-1 bg-blue-50 text-blue-600 rounded">Auto-updating</span>
+            </div>
+            <app-view-all-items [limit]="5"></app-view-all-items>
+        </div>
+    </div>
+
+    <div *ngIf="activeTab === 'all'" class="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
+        <app-view-all-items></app-view-all-items>
+    </div>
+</div>

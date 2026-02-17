@@ -1,0 +1,23 @@
+<div class="overflow-x-auto">
+    <table class="w-full text-left">
+        <thead>
+            <tr class="bg-gray-50 text-gray-500 text-xs uppercase tracking-wider font-bold">
+                <th class="px-6 py-4">ID</th>
+                <th class="px-6 py-4">Customer</th>
+                <th class="px-6 py-4">Mobile</th>
+                <th class="px-6 py-4">City</th>
+                <th *ngIf="showActions" class="px-6 py-4 text-right">Actions</th>
+            </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-100">
+            <tr *ngFor="let customer of displayedCustomers" class="hover:bg-gray-50 transition-colors">
+                <td class="px-6 py-4 text-sm font-semibold text-blue-600">{{ customer.id }}</td>
+                <td class="px-6 py-4 font-medium text-gray-900">{{ customer.name }}</td>
+                <td class="px-6 py-4 text-sm text-gray-600">{{ customer.mobile }}</td>
+                <td class="px-6 py-4 text-sm text-gray-600">{{ customer.address }}</td>
+                <td *ngIf="showActions" class="px-6 py-4 text-right">
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

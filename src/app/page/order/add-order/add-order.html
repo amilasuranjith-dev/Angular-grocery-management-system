@@ -1,0 +1,166 @@
+<div class="bg-white rounded-xl border border-gray-100 shadow-sm p-4">
+    <!-- Search Order Section -->
+    <div class="flex items-center space-x-4 mb-4 pb-4 border-b border-gray-100">
+        <div class="flex-1 relative max-w-lg">
+            <input [(ngModel)]="searchId" type="text" placeholder="Search by Order ID (e.g. ORD-001)..."
+                class="w-full pl-4 pr-12 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
+            <button (click)="onSearch()"
+                class="absolute right-2 top-1.5 p-1.5 bg-gray-800 text-white rounded-md hover:bg-black transition-colors">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                </svg>
+            </button>
+        </div>
+    </div>
+
+    <!-- Order Header Section -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4 border-b border-dashed border-gray-200 pb-4">
+        <div>
+            <label class="block text-xs font-bold uppercase text-gray-500 mb-1">Order ID</label>
+            <input [(ngModel)]="orderId" type="text" readonly
+                class="w-full px-4 py-2 bg-gray-100 border border-gray-200 rounded-lg text-gray-700 font-mono">
+        </div>
+        <div>
+            <label class="block text-xs font-bold uppercase text-gray-500 mb-1">Order Date</label>
+            <input [(ngModel)]="orderDate" type="date"
+                class="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white outline-none">
+        </div>
+    </div>
+
+    <!-- Customer Selection -->
+    <div class="mb-4">
+        <label class="block text-xs font-bold uppercase text-gray-500 mb-1">Select Customer</label>
+        <div class="relative">
+            <select [(ngModel)]="selectedCustomer"
+                class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white outline-none appearance-none">
+                <option [ngValue]="null">Choose a customer...</option>
+                <option *ngFor="let customer of customers" [ngValue]="customer">
+                    {{customer.id}} - {{customer.name}} ({{customer.mobile}})
+                </option>
+            </select>
+            <div class="absolute inset-y-0 right-0 flex items-center px-4 pointer-events-none text-gray-500">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                </svg>
+            </div>
+        </div>
+    </div>
+
+    <!-- Item Selection Section -->
+    <div class="bg-gray-50 rounded-xl p-4 mb-4 border border-gray-200">
+        <h3 class="text-sm font-bold text-gray-800 uppercase mb-4">Add Items</h3>
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-end">
+            <div class="md:col-span-4">
+                <label class="block text-xs font-bold uppercase text-gray-500 mb-1">Item</label>
+                <select [(ngModel)]="selectedItem" (change)="updateItemDetails()"
+                    class="w-full px-3 py-2 bg-white border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
+                    <option [ngValue]="null">Select Item...</option>
+                    <option *ngFor="let item of items" [ngValue]="item">
+                        {{item.code}} - {{item.description}}
+                    </option>
+                </select>
+            </div>
+            <div class="md:col-span-2">
+                <label class="block text-xs font-bold uppercase text-gray-500 mb-1">Unit Price</label>
+                <input [value]="selectedItem?.unitPrice || 0" type="text" readonly
+                    class="w-full px-3 py-2 bg-gray-100 border border-gray-200 rounded-lg text-right">
+            </div>
+            <div class="md:col-span-2">
+                <label class="block text-xs font-bold uppercase text-gray-500 mb-1">Qty On Hand</label>
+                <input [value]="selectedItem?.qty || 0" type="text" readonly
+                    class="w-full px-3 py-2 bg-gray-100 border border-gray-200 rounded-lg text-right">
+            </div>
+            <div class="md:col-span-2">
+                <label class="block text-xs font-bold uppercase text-gray-500 mb-1">Quantity</label>
+                <input [(ngModel)]="qty" type="number" min="1"
+                    class="w-full px-3 py-2 bg-white border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none text-right">
+            </div>
+            <div class="md:col-span-2">
+                <button (click)="addItem()"
+                    class="w-full py-2 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition-colors flex justify-center items-center">
+                    <svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6">
+                        </path>
+                    </svg>
+                    Add
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Order Items Table -->
+    <div class="mb-4 overflow-hidden rounded-lg border border-gray-200">
+        <table class="w-full text-sm text-left">
+            <thead class="bg-gray-50 text-gray-500 font-bold uppercase text-xs">
+                <tr>
+                    <th class="px-6 py-3">Code</th>
+                    <th class="px-6 py-3">Description</th>
+                    <th class="px-6 py-3 text-right">Unit Price</th>
+                    <th class="px-6 py-3 text-right">Qty</th>
+                    <th class="px-6 py-3 text-right">Total</th>
+                    <th class="px-6 py-3 text-center">Action</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-100">
+                <tr *ngFor="let item of cart; let i = index" class="hover:bg-gray-50">
+                    <td class="px-6 py-4 font-medium text-gray-900">{{item.code}}</td>
+                    <td class="px-6 py-4 text-gray-600">{{item.description}}</td>
+                    <td class="px-6 py-4 text-right text-gray-600">LKR {{item.unitPrice}}</td>
+                    <td class="px-6 py-4 text-right text-gray-600">{{item.qty}}</td>
+                    <td class="px-6 py-4 text-right font-medium text-blue-600">LKR {{item.total}}</td>
+                    <td class="px-6 py-4 text-center">
+                        <button (click)="removeItem(i)" class="text-red-500 hover:text-red-700 hover:bg-red-50 p-2 rounded-full transition-colors">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                            </svg>
+                        </button>
+                    </td>
+                </tr>
+                <tr *ngIf="cart.length === 0">
+                    <td colspan="6" class="px-6 py-8 text-center text-gray-400 italic">
+                        No items added to the cart yet.
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Totals Section -->
+    <div class="flex flex-col items-end gap-4 border-t border-gray-100 pt-4">
+        <div class="w-full md:w-80 space-y-4">
+             <div class="flex justify-between items-center text-gray-600">
+                <span class="font-medium">Sub Total:</span>
+                <span class="font-bold text-gray-900">LKR {{subTotal}}</span>
+            </div>
+            
+            <div class="flex justify-between items-center">
+                <span class="font-medium text-gray-600">Discount (%):</span>
+                <input [(ngModel)]="discount" (input)="calculateTotals()" type="number" min="0" max="100"
+                    class="w-24 px-2 py-1 bg-gray-50 border border-gray-200 rounded text-right focus:ring-2 focus:ring-blue-500 outline-none">
+            </div>
+
+            <div class="flex justify-between items-center pt-4 border-t border-gray-200">
+                <span class="text-lg font-bold text-gray-800">Total Amount:</span>
+                <span class="text-2xl font-bold text-blue-600 text-right">LKR {{finalTotal}}</span>
+            </div>
+
+            <div class="flex flex-col gap-2 mt-4">
+                <button (click)="placeOrder()" [disabled]="cart.length === 0 || !selectedCustomer"
+                    class="w-full py-3 bg-green-600 text-white rounded-lg font-bold hover:bg-green-700 shadow-md shadow-green-100 transition-all active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed">
+                    Place Order
+                </button>
+                <div class="grid grid-cols-2 gap-2">
+                    <button (click)="onUpdate()"
+                        class="w-full py-2 bg-orange-50 text-orange-600 rounded-lg font-semibold hover:bg-orange-100 transition-colors border border-orange-200">
+                        Update
+                    </button>
+                    <button (click)="onDelete()"
+                        class="w-full py-2 bg-red-50 text-red-600 rounded-lg font-semibold hover:bg-red-100 transition-colors border border-red-200">
+                        Delete
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
